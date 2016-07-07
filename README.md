@@ -15,6 +15,6 @@ Arguments with a space or characters parsed by the shell must be quoted. Most of
 
 Run the mkusb script in your shell:
 
-    $ sudo ./mkusb.sh [distros]
+    $ sudo ./mkusb.sh [distros] [device] [partition]
 
-If the distros file is omitted, the script will default to a file called 'distros' in the current working directory.
+If the distros file is omitted, the script will default to a file called 'distros' in the current working directory. If device is omitted, you will be prompted to select from available removable devices. If partition is omitted, the device will be formatted to have one EFI boot partition.

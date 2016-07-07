@@ -11,40 +11,46 @@ if [ -z "$distros" ]; then
 fi
 
 # get device
-echo "getting device..."
-devs="$(find /dev/disk/by-path | grep -- '-usb-' | grep -v -- '-part[0-9]*$')"
+dev="$2"
+if [ -z "$dev" ]; then
+	echo "getting device..."
+	devs="$(find /dev/disk/by-path | grep -- '-usb-' | grep -v -- '-part[0-9]*$')"
 
-if [ -z "$devs" ]; then
-	echo "error: no usb device found"
-	exit 2
+	if [ -z "$devs" ]; then
+		echo "error: no usb device found"
+		exit 2
+	fi
+
+	devs="$(readlink -f $devs)"
+
+	dialogdevs=""
+
+	dialogmodel=""
+	for dialogdev in $devs; do
+		dialogmodel="$(lsblk -ndo model "$dialogdev")"
+		dialogdevs="$dialogdevs $dialogdev '$dialogmodel' off"
+	done
+	unset dialogdev
+	unset dialogmodel
+
+	while [ -z "$dev" ]; do
+		dev="$(eval "dialog --stdout --radiolist 'select usb device' 12 40 5 $dialogdevs")"
+		if [ "$?" -ne "0" ]; then
+			exit
+		fi
+	done
+
+	unset dialogdevs
+
+	unset devs
 fi
 
-devs="$(readlink -f $devs)"
-
-dialogdevs=""
-
-dialogmodel=""
-for dialogdev in $devs; do
-	dialogmodel="$(lsblk -ndo model "$dialogdev")"
-	dialogdevs="$dialogdevs $dialogdev '$dialogmodel' off"
-done
-unset dialogdev
-unset dialogmodel
-
-while [ -z "$dev" ]; do
-	dev="$(eval "dialog --stdout --radiolist 'select usb device' 12 40 5 $dialogdevs")"
-	if [ "$?" -ne "0" ]; then
-		exit
-	fi
-done
-
-unset dialogdevs
-
-unset devs
-
-# partition device
-echo "partitioning..."
-fdisk "$dev" >/dev/null <<EOF
+# get partition
+part="$3"
+if [ -z "$part" ]; then
+	# partition device
+	echo "partitioning..."
+	fdisk "$dev" >/dev/null <<EOF
 o
 n
 
@@ -56,11 +62,12 @@ ef
 w
 EOF
 
-part="$dev"1
+	part="$dev"1
 
-# format device
-echo "formatting..."
-mkfs.fat "$part" >/dev/null
+	# format device
+	echo "formatting..."
+	mkfs.fat "$part" >/dev/null
+fi
 
 # mount devie
 echo "mounting..."
