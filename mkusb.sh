@@ -115,7 +115,7 @@ EOF
 	cp "$2" "$mnt"/
 }
 
-source "$distros"
+source "$(readlink -f $distros)"
 
 unset distros
 
