@@ -45,9 +45,13 @@ if [ -z "$dev" ]; then
 	unset devs
 fi
 
+# store label
+label="LIVE"
+
 # get partition
-part="$3"
-if [ -z "$part" ]; then
+efipart="$3"
+livepart="$4"
+if [ -z "$efipart" ] || [ -z "$livepart" ]; then
 	# partition device
 	echo "partitioning..."
 	fdisk "$dev" >/dev/null <<EOF
@@ -56,36 +60,80 @@ n
 
 
 
-
++128M
 t
 ef
+n
+
+
+
+
+t
+
+b
 w
 EOF
 
-	part="$dev"1
+	efipart="$dev"1
+	livepart="$dev"2
 
 	# format device
 	echo "formatting..."
-	mkfs.fat "$part" >/dev/null
+	mkfs.fat -n ESP "$efipart" >/dev/null
+	mkfs.fat -n "$label" "$livepart" >/dev/null
 fi
 
 # mount devie
 echo "mounting..."
-mnt="$(mktemp -d)"
-mount "$part" "$mnt"
+efimnt="$(mktemp -d)"
+livemnt="$(mktemp -d)"
+mount "$efipart" "$efimnt"
+mount "$livepart" "$livemnt"
 
-unset part
+unset efipart
 
 # install grub
 echo "installing grub..."
-grub2-install --target=i386-pc --boot-directory="$mnt" "$dev" >/dev/null
-grub2-install --target=x86_64-efi --boot-directory="$mnt" --efi-directory="$mnt" --removable >/dev/null
+grub2-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
+grub2-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
 
 unset dev
 
-# configure and copy distros
-echo "configuring grub and copying distros..."
-cat >"$mnt"/grub/grub.cfg <<EOF
+# copy config and distros
+echo "copying distros..."
+
+# create empty grub configuration
+echo -n "" >"$livemnt"/grub.cfg
+
+label() {
+	label="$1"
+
+	umount "$livepart"
+	fatlabel "$livepart" "$label" >/dev/null
+	mount "$livepart" "$livemnt"
+}
+
+iso() {
+	echo -e "\t$1"
+	cat >>"$livemnt"/grub.cfg <<EOF
+menuentry '$1' {
+	set filename=/$(basename "$2")
+	set label=$label
+	loopback iso \$filename
+	linux (iso)$3 $(sed -e "s/%\(.\+\)%/\$\1/g" <<<$5)
+	initrd $(for initrd in $4; do echo "(iso)$initrd"; done)
+}
+
+EOF
+
+	cp "$2" "$livemnt"/
+}
+
+source "$(readlink -f $distros)"
+
+# configure grub
+echo "configuring grub..."
+cat >"$efimnt"/grub/grub.cfg <<EOF
 if loadfont /grub/fonts/unicode.pf2; then
 	set gfxmode=auto
 	insmod efi_gop
@@ -98,25 +146,14 @@ set menu_color_normal=white/black
 set menu_color_highlight=black/light-gray
 
 set gfxpayload=keep
+
+search --no-floppy --label --set=root $label
+
+source /grub.cfg
 EOF
 
-iso() {
-	echo -e "\t$1"
-	cat >>"$mnt"/grub/grub.cfg <<EOF
-
-menuentry '$1' {
-	set filename=/$(basename "$2")
-	loopback iso \$filename
-	linux (iso)$3 $5 $6=\$filename
-	initrd $(for initrd in $4; do echo "(iso)$initrd"; done)
-}
-EOF
-
-	cp "$2" "$mnt"/
-}
-
-source "$(readlink -f $distros)"
-
+unset livepart
+unset label
 unset distros
 
 # sync
@@ -125,9 +162,12 @@ sync
 
 # unmount
 echo "unmounting..."
-umount "$mnt"
-rmdir "$mnt"
+umount "$livemnt"
+umount "$efimnt"
+rmdir "$livemnt"
+rmdir "$efimnt"
 
-unset mnt
+unset livemnt
+unset efimnt
 
 echo "done"
