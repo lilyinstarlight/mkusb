@@ -1,3 +1,3 @@
-iso 'Xubuntu 16.04' xubuntu-16.04-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/xubuntu.seed boot=casper quiet splash' iso-scan/filename
+iso 'Xubuntu 16.04.1' xubuntu-16.04.1-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/xubuntu.seed boot=casper quiet splash' iso-scan/filename
 iso 'Fedora Workstation 24' Fedora-Workstation-Live-x86_64-24-1.2.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-24-1-2 rd.live.image quiet' iso-scan/filename
 iso 'System Rescue CD 4.8.0' systemrescuecd-x86-4.8.0.iso /isolinux/rescue64 /isolinux/initram.igz docache isoloop
