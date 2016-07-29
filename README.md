@@ -7,10 +7,12 @@ mkusb is a shell script to create ISO multiboot USB flash drives that support bo
 Usage
 =====
 
-Edit a distros file and add ISOs separated by newlines in the following format:
+Edit a distros file and an optional label definition and multiple iso definitions in the following format:
 
     label <filesystem label>
     iso <iso name> <kernel> <initrd> <boot flags>
+    iso <iso name> <kernel> <initrd> <boot flags>
+    ...
 
 The boot flags are parsed for '%variable%' expressions and fills them out to GRUB variables. Currently only '%filename%' and '%label%' are supported. Arguments with a space or characters parsed by the shell must be quoted. Most of these arguments can be found by mounting the ISO file and checking the boot parameters in it. Because the distros file is just a shell script, more advanced features can be added like conditionally adding ISO files based on the environment. An example distros file is provided in this repository.
 
