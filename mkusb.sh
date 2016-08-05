@@ -60,9 +60,9 @@ n
 
 
 
-+128M
++$(expr $(blockdev --getsize64 "$dev") / 1024 - 524288)K
 t
-ef
+b
 n
 
 
@@ -70,25 +70,25 @@ n
 
 t
 
-b
+ef
 w
 EOF
 
-	efipart="$dev"1
-	livepart="$dev"2
+	livepart="$dev"1
+	efipart="$dev"2
 
 	# format device
 	echo "formatting..."
-	mkfs.fat -n ESP "$efipart" >/dev/null
-	mkfs.fat -n "$label" "$livepart" >/dev/null
+	mkfs.fat -F 32 -n "$label" "$livepart" >/dev/null
+	mkfs.fat -F 32 -n ESP "$efipart" >/dev/null
 fi
 
 # mount devie
 echo "mounting..."
-efimnt="$(mktemp -d)"
 livemnt="$(mktemp -d)"
-mount "$efipart" "$efimnt"
+efimnt="$(mktemp -d)"
 mount "$livepart" "$livemnt"
+mount "$efipart" "$efimnt"
 
 unset efipart
 
@@ -162,12 +162,12 @@ sync
 
 # unmount
 echo "unmounting..."
-umount "$livemnt"
 umount "$efimnt"
-rmdir "$livemnt"
+umount "$livemnt"
 rmdir "$efimnt"
+rmdir "$livemnt"
 
-unset livemnt
 unset efimnt
+unset livemnt
 
 echo "done"
