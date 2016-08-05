@@ -4,6 +4,15 @@ mkusb
 mkusb is a shell script to create ISO multiboot USB flash drives that support both legacy and EFI boot.
 
 
+Requirements
+============
+
+* grub2
+* dosfstools
+* dialog (optional; required if not specifying device on command line)
+* sane environment (util-linux, coreutils, etc.)
+
+
 Usage
 =====
 
