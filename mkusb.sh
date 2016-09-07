@@ -81,6 +81,8 @@ EOF
 	echo "formatting..."
 	mkfs.fat -F 32 -n "$label" "$livepart" >/dev/null
 	mkfs.fat -F 32 -n ESP "$efipart" >/dev/null
+
+	formatted=1
 fi
 
 # mount devie
@@ -108,9 +110,11 @@ echo -n "" >"$livemnt"/grub.cfg
 label() {
 	label="$1"
 
-	umount "$livepart"
-	fatlabel "$livepart" "$label" >/dev/null
-	mount "$livepart" "$livemnt"
+	if [ -n "$formatted" ]; then
+		umount "$livepart"
+		fatlabel "$livepart" "$label" >/dev/null
+		mount "$livepart" "$livemnt"
+	fi
 }
 
 iso() {
