@@ -7,7 +7,7 @@ mkusb is a shell script to create ISO multiboot USB flash drives that support bo
 Requirements
 ============
 
-* grub2
+* grub
 * dosfstools
 * dialog (optional; required if not specifying device on command line)
 * sane environment (util-linux, coreutils, etc.)
