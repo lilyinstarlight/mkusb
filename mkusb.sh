@@ -94,8 +94,8 @@ unset efipart
 
 # install grub
 echo "installing grub..."
-grub2-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
-grub2-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
+grub-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
+grub-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
 
 unset dev
 
