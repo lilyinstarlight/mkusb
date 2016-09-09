@@ -140,8 +140,14 @@ echo "configuring grub..."
 cat >"$efimnt"/grub/grub.cfg <<EOF
 if loadfont /grub/fonts/unicode.pf2; then
 	set gfxmode=auto
-	insmod efi_gop
-	insmod efi_uga
+
+	if [ \${grub_platform} == "efi" ]; then
+		insmod efi_gop
+		insmod efi_uga
+	else
+		insmod all_video
+	fi
+
 	insmod gfxterm
 	terminal_output gfxterm
 fi
