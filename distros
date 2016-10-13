@@ -1,5 +1,5 @@
 label LIVEUSB
 iso 'Xubuntu 16.04.1' xubuntu-16.04.1-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/xubuntu.seed boot=casper quiet splash iso-scan/filename=%filename%'
 iso 'Fedora Workstation 24' Fedora-Workstation-Live-x86_64-24-1.2.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-24-1-2 rd.live.image quiet iso-scan/filename=%filename%'
-iso 'Tails 2.5' tails-i386-2.5.iso /live/vmlinuz2 /live/initrd2.img 'boot=live config live-media=removable apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails slab_nomerge slub_debug=FZ mce=0 vsyscall=none quiet findiso=%filename%'
+iso 'Tails 2.6' tails-i386-2.6.iso /live/vmlinuz2 /live/initrd2.img 'boot=live config live-media=removable apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails slab_nomerge slub_debug=FZ mce=0 vsyscall=none quiet findiso=%filename%'
 iso 'System Rescue CD 4.8.3' systemrescuecd-x86-4.8.3.iso /isolinux/rescue64 /isolinux/initram.igz 'docache isoloop=%filename%'
