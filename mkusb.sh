@@ -125,7 +125,7 @@ menuentry '$1' {
 	set label=$label
 	loopback iso \$filename
 	linux (iso)$3 $(sed -e "s/%\([^%]\+\)%/\$\1/g" <<<$5)
-	initrd $(for initrd in $4; do echo "(iso)$initrd"; done)
+	initrd$(for initrd in $4; do echo -n " (iso)$initrd"; done)
 }
 
 EOF
