@@ -153,7 +153,7 @@ EOF
 
 EOF
 
-	cp "$2" "$livemnt"/
+	cp -n "$2" "$livemnt"/
 }
 
 source "$(readlink -f $distros)"
