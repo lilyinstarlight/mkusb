@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ "$UID" -ne "0" ]; then
+if [ "$(id -u)" -ne 0 ]; then
 	echo "error: script must be run as root"
 	exit 1
 fi
@@ -126,34 +126,58 @@ menuentry '$1' {
 	loopback iso \$filename
 EOF
 
-	params="$(sed -e "s/%\([^%]\+\)%/\$\1/g" <<<$5)"
-	read kernel64 kernel32 <<<$3
+	IFS='#' read kernel64 kernel32 <<EOF
+$(echo "$3" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+EOF
+	IFS='#' read initrd64 initrd32 <<EOF
+$(echo "$4" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+EOF
+	IFS='#' read param64 param32 <<EOF
+$(echo "$5" | sed -e 's/%\([^%]\+\)%/$\1/g' | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+EOF
 
 	if [ -n "$kernel32" ]; then
+		if [ -z "$initrd32" ]; then
+			initrd32="$initrd64"
+		fi
+
+		if [ -z "$param32" ]; then
+			param32="$param64"
+		fi
+
 		cat >>"$livemnt"/grub.cfg <<EOF
 	if cpuid -l; then
-		linux (iso)$kernel64 $params
+		linux (iso)$kernel64 $param64
+		initrd$(for initrd in $initrd64; do echo -n " (iso)$initrd"; done)
 	else
-		linux (iso)$kernel32 $params
+		linux (iso)$kernel32 $param32
+		initrd$(for initrd in $initrd32; do echo -n " (iso)$initrd"; done)
 	fi
 EOF
 	else
 		cat >>"$livemnt"/grub.cfg <<EOF
-	linux (iso)$kernel64 $params
+	linux (iso)$kernel64 $param64
+	initrd$(for initrd in $initrd64; do echo -n " (iso)$initrd"; done)
 EOF
 	fi
 
-	unset params
+	unset param64
+	unset param32
+	unset initrd64
+	unset initrd32
 	unset kernel64
 	unset kernel32
 
 	cat >>"$livemnt"/grub.cfg <<EOF
-	initrd$(for initrd in $4; do echo -n " (iso)$initrd"; done)
 }
 
 EOF
 
-	cp -n "$2" "$livemnt"/
+	iso="$livemnt/$(basename "$2")"
+
+	([ ! -e "$iso" ] || [ "$iso" -ot "$2" ]) && cp "$2" "$iso"
+
+	unset iso
 }
 
 source "$(readlink -f $distros)"
