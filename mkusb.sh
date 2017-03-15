@@ -124,7 +124,30 @@ menuentry '$1' {
 	set filename=/$(basename "$2")
 	set label=$label
 	loopback iso \$filename
-	linux (iso)$3 $(sed -e "s/%\([^%]\+\)%/\$\1/g" <<<$5)
+EOF
+
+	params="$(sed -e "s/%\([^%]\+\)%/\$\1/g" <<<$5)"
+	read kernel64 kernel32 <<<$3
+
+	if [ -n "$kernel32" ]; then
+		cat >>"$livemnt"/grub.cfg <<EOF
+	if cpuid -l; then
+		linux (iso)$kernel64 $params
+	else
+		linux (iso)$kernel32 $params
+	fi
+EOF
+	else
+		cat >>"$livemnt"/grub.cfg <<EOF
+	linux (iso)$kernel64 $params
+EOF
+	fi
+
+	unset params
+	unset kernel64
+	unset kernel32
+
+	cat >>"$livemnt"/grub.cfg <<EOF
 	initrd$(for initrd in $4; do echo -n " (iso)$initrd"; done)
 }
 
