@@ -4,6 +4,9 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# whether to partition with fat or ext2
+fat=1
+
 # get distro configuration
 distros="$1"
 if [ -z "$distros" ]; then
@@ -79,7 +82,11 @@ EOF
 
 	# format device
 	echo "formatting..."
-	mkfs.fat -F 32 -n "$label" "$livepart" >/dev/null
+	if [ $fat -ne 0 ]; then
+		mkfs.fat -F 32 -n "$label" "$livepart" >/dev/null
+	else
+		mkfs.ext2 -L "$label" "$livepart" >/dev/null
+	fi
 	mkfs.fat -F 32 -n ESP "$efipart" >/dev/null
 
 	formatted=1
@@ -112,7 +119,11 @@ label() {
 
 	if [ -n "$formatted" ]; then
 		umount "$livepart"
-		fatlabel "$livepart" "$label" >/dev/null
+		if [ $fat -ne 0 ]; then
+			fatlabel "$livepart" "$label" >/dev/null
+		else
+			e2label "$livepart" "$label" >/dev/null
+		fi
 		mount "$livepart" "$livemnt"
 	fi
 }
