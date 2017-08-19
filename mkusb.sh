@@ -191,6 +191,38 @@ EOF
 	unset iso
 }
 
+refind() {
+	echo -e "\t$1"
+
+	refindmnt="$(mktemp -d)"
+	mount -o ro "$2" "$refindmnt"
+
+	cat >>"$livemnt"/grub.cfg <<EOF
+if [ \${grub_platform} == "efi" ]; then
+	menuentry '$1' {
+		search --no-floppy --file --set=root /EFI/refind/bootx64.efi
+
+		if cpuid -l; then
+			chainloader /EFI/refind/bootx64.efi
+		else
+			chainloader /EFI/refind/bootia32.efi
+		fi
+	}
+fi
+
+EOF
+
+	cp -r "$refindmnt"/EFI/boot "$efimnt"/EFI/refind
+	cp -r "$refindmnt"/EFI/tools "$efimnt"/EFI/tools
+
+	rm -rf "$livemnt"/refind
+	cp -r "$refindmnt" "$livemnt"/refind
+	rm -rf "$livemnt"/refind/EFI
+
+	umount "$refindmnt"
+	unset refindmnt
+}
+
 source "$(readlink -f $distros)"
 
 # configure grub
