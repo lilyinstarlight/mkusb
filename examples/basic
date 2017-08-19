@@ -1,0 +1,6 @@
+label FoosterLIVE
+iso 'Antergos 17.6' /mnt/img/iso/antergos-17.6-x86_64.iso /arch/boot/vmlinuz '/arch/boot/intel_ucode.img /arch/boot/archiso.img' 'archisobasedir=arch archisolabel=ANTERGOS modules-load=loop rd.modules-load=loop udev.log-priority=crit rd.udev.log-priority=crit quiet splash img_label=%label% img_loop=%filename%'
+iso 'Fedora Workstation 26' /mnt/img/iso/Fedora-Workstation-Live-x86_64-26-1.5.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-26-1-5 rd.live.image quiet iso-scan/filename=%filename%'
+iso 'Solus 2017.04.18.0' /mnt/img/iso/Solus-2017.04.18.0-Budgie.iso /boot/kernel /boot/initrd.img 'root=live:CDLABEL=SolusLiveBudgie ro rd.luks=0 rd.md=0 quiet splash iso-scan/filename=%filename%'
+iso 'Tails 3.0.1' /mnt/img/iso/tails-amd64-3.0.1.iso /live/vmlinuz /live/initrd.img 'boot=live config live-media=removable apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails kaslr slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 union=aufs quiet findiso=%filename%'
+iso 'System Rescue CD 5.0.2' /mnt/img/iso/systemrescuecd-x86-5.0.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
