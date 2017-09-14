@@ -10,6 +10,7 @@ iso 'Arch 2017.06.01' /mnt/img/iso/archlinux-2017.06.01-x86_64.iso /arch/boot/vm
 iso 'CentOS 7' /mnt/img/iso/CentOS-7-x86_64-NetInstall-1611.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet iso-scan/filename=%filename%'
 iso 'Fedora Xfce 26' /mnt/img/iso/Fedora-Xfce-Live-x86_64-26-1.5.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-Xfce-Live-26-1-5 rd.live.image quiet iso-scan/filename=%filename%'
 iso 'Fedora Server 26' /mnt/img/iso/Fedora-Server-dvd-x86_64-26-1.5.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-S-dvd-x86_64-26 rd.live.image quiet iso-scan/filename=%filename%'
+iso 'Sabayon Linux GNOME 16.11' /mnt/img/iso/Sabayon_Linux_16.11_amd64_GNOME.iso /boot/sabayon /boot/sabayon.igz 'overlayfs cdroot splash quiet iso-scan/filename=%filename%'
 iso 'elementary OS 0.4.1' /mnt/img/iso/elementaryos-0.4.1-stable.20170517.iso /casper/vmlinuz /casper/initrd.lz 'file=/cdrom/preseed/ubuntu.seed boot=casper quiet splash iso-scan/filename=%filename%'
 iso 'Ubuntu 17.04' /mnt/img/iso/ubuntu-17.04-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/ubuntu.seed boot=casper quiet splash iso-scan/filename=%filename%'
 iso 'Xubuntu 17.04' /mnt/img/iso/xubuntu-17.04-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/xubuntu.seed boot=casper quiet splash iso-scan/filename=%filename%'
