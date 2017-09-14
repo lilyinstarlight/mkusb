@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 if [ "$(id -u)" -ne 0 ]; then
 	echo "error: script must be run as root"
 	exit 1
@@ -55,30 +55,28 @@ label="LIVE"
 efipart="$3"
 livepart="$4"
 if [ -z "$efipart" ] || [ -z "$livepart" ]; then
+	# sector sizes
+	secstart=2048
+	secefi=1048576
+
 	# partition device
 	echo "partitioning..."
-	fdisk "$dev" >/dev/null <<EOF
-o
-n
+	dd if=/dev/zero of="$dev" count=$secstart &>/dev/null
+	sfdisk "$dev" >/dev/null <<EOF
+label: dos
+device: $dev
+unit: sectors
 
-
-
-+$(expr $(blockdev --getsize64 "$dev") / 1024 - 524288)K
-t
-b
-n
-
-
-
-
-t
-
-ef
-w
+${dev}1 : start=$secstart, size=$(expr $(blockdev --getsz "$dev") - $secstart - $secefi), type=b
+${dev}2 : size=$secefi, type=ef
 EOF
+	blockdev --rereadpt "$dev"
 
 	livepart="$dev"1
 	efipart="$dev"2
+
+	unset secstart
+	unset secefi
 
 	# format device
 	echo "formatting..."
