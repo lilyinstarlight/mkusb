@@ -1,5 +1,5 @@
 label 'FoosterLIVE'
-iso 'System Rescue CD 5.0.2' /mnt/img/iso/systemrescuecd-x86-5.0.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
+iso 'System Rescue CD 5.1.2' /mnt/img/iso/systemrescuecd-x86-5.1.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
 iso 'Kali 2017.1' /mnt/img/iso/kali-linux-2017.1-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live components splash username=root hostname=kali findiso=%filename%'
 iso 'BlackArch 2017.06.14' /mnt/img/iso/blackarchlinux-live-2017.06.14-x86_64.iso /blackarch/boot/x86_64/vmlinuz /blackarch/boot/x86_64/archiso.img 'archisobasedir=blackarch img_label=%label% img_loop=%filename%'
 iso 'Tails 3.0.1' /mnt/img/iso/tails-amd64-3.0.1.iso /live/vmlinuz /live/initrd.img 'boot=live config apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails kaslr slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 union=aufs quiet findiso=%filename%'
@@ -31,4 +31,4 @@ iso 'ZorinOS 12.1 Education' /mnt/img/iso/Zorin-OS-12.1-Education-64.iso /casper
 iso 'Security Onion 14.04.5.2' /mnt/img/iso/securityonion-14.04.5.2.iso /casper/vmlinuz /casper/initrd.gz 'file=/cdrom/preseed/custom.seed boot=casper quiet splash iso-scan/filename=%filename%'
 iso 'oVirt Live 4.1.2' /mnt/img/iso/ovirt-live-4.1.2.iso /isolinux/vmlinuz0 /isolinux/initrd0.img 'root=live:CDLABEL=ovirt-live-4.1.2 rootfstype=auto ro rd.live.image quiet rhgb rd.luks=0 rd.md=0 rd.dm=0 rd.live.check rd.live.overlay.size=1024 iso-scan/filename=%filename%'
 iso 'Clonezilla 2.5.2' /mnt/img/iso/clonezilla-live-2.5.2-17-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live union=overlay username=user config components quiet noswap edd=on locales= keyboard-layouts= ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch="no" vga=791 toram=filesystem.squashfs ip= net.ifnames=0 nosplash findiso=%filename%'
-refind 'rEFInd 0.11.0' /mnt/img/iso/refind-cd-0.11.0.iso
+refind 'rEFInd 0.11.2' /mnt/img/iso/refind-cd-0.11.2.iso

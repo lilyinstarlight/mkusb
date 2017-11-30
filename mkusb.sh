@@ -17,7 +17,7 @@ fi
 dev="$2"
 if [ -z "$dev" ]; then
 	echo "getting device..."
-	devs="$(find /dev/disk/by-path | grep -- '-usb-' | grep -v -- '-part[0-9]*$')"
+	devs="$(find /dev/disk/by-path | grep -- '-usb-' | grep -v -- '-part[0-9]*$' || true)"
 
 	if [ -z "$devs" ]; then
 		echo "error: no usb device found"
