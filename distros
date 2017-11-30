@@ -1,6 +1,3 @@
-label LIVEUSB
-iso 'Antergos 17.6' antergos-17.6-x86_64.iso /arch/boot/vmlinuz '/arch/boot/intel_ucode.img /arch/boot/archiso.img' 'archisobasedir=arch archisolabel=ANTERGOS modules-load=loop rd.modules-load=loop udev.log-priority=crit rd.udev.log-priority=crit quiet splash img_label=%label% img_loop=%filename%'
-iso 'Fedora Workstation 26' Fedora-Workstation-Live-x86_64-26-1.5.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-26-1-5 rd.live.image quiet iso-scan/filename=%filename%'
-iso 'Xubuntu 17.04' xubuntu-17.04-desktop-amd64.iso /casper/vmlinuz.efi /casper/initrd.lz 'file=/cdrom/preseed/xubuntu.seed boot=casper quiet splash iso-scan/filename=%filename%'
-iso 'Tails 3.0.1' tails-amd64-3.0.1.iso /live/vmlinuz /live/initrd.img 'boot=live config live-media=removable apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails kaslr slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 union=aufs quiet findiso=%filename%'
-iso 'System Rescue CD 5.0.2' systemrescuecd-x86-5.0.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
+label RESCUE
+iso 'System Rescue CD 5.1.2' /mnt/img/iso/systemrescuecd-x86-5.1.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
+refind 'rEFInd 0.11.2' /mnt/img/iso/refind-cd-0.11.2.iso
