@@ -97,6 +97,8 @@ efimnt="$(mktemp -d)"
 mount "$livepart" "$livemnt"
 mount "$efipart" "$efimnt"
 
+trap "umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt'" EXIT
+
 unset efipart
 
 # install grub
