@@ -97,7 +97,7 @@ efimnt="$(mktemp -d)"
 mount "$livepart" "$livemnt"
 mount "$efipart" "$efimnt"
 
-trap "umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt'" EXIT
+trap "(set +e; umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt') &>/dev/null" EXIT
 
 unset efipart
 
