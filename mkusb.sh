@@ -61,13 +61,13 @@ if [ -z "$efipart" ] || [ -z "$livepart" ]; then
 
 	# partition device
 	echo "partitioning..."
-	dd if=/dev/zero of="$dev" count=$secstart &>/dev/null
+	dd if=/dev/zero of="$dev" count=$secstart >/dev/null 2>/dev/null
 	sfdisk "$dev" >/dev/null <<EOF
 label: dos
 device: $dev
 unit: sectors
 
-${dev}1 : start=$secstart, size=$(expr $(blockdev --getsz "$dev") - $secstart - $secefi), type=b
+${dev}1 : start=$secstart, size=$(expr "$(blockdev --getsz "$dev")" - $secstart - $secefi), type=b
 ${dev}2 : size=$secefi, type=ef
 EOF
 	blockdev --rereadpt "$dev"
@@ -97,7 +97,7 @@ efimnt="$(mktemp -d)"
 mount "$livepart" "$livemnt"
 mount "$efipart" "$efimnt"
 
-trap "(set +e; umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt') &>/dev/null" EXIT
+trap "(set +e; umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt') >/dev/null 2>/dev/null" EXIT
 
 unset efipart
 
@@ -112,7 +112,7 @@ unset dev
 echo "copying distros..."
 
 # create empty grub configuration
-echo -n "" >"$livemnt"/grub.cfg
+printf "" >"$livemnt"/grub.cfg
 
 label() {
 	label="$1"
@@ -129,7 +129,7 @@ label() {
 }
 
 iso() {
-	echo -e "\t$1"
+	printf "	%s" "$1"
 	cat >>"$livemnt"/grub.cfg <<EOF
 menuentry '$1' {
 	set filename=/$(basename "$2")
@@ -137,14 +137,14 @@ menuentry '$1' {
 	loopback iso \$filename
 EOF
 
-	IFS='#' read kernel64 kernel32 <<EOF
-$(echo "$3" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+	IFS='#' read -r kernel64 kernel32 <<EOF
+$(printf "%s" "$3" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
 EOF
-	IFS='#' read initrd64 initrd32 <<EOF
-$(echo "$4" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+	IFS='#' read -r initrd64 initrd32 <<EOF
+$(printf "%s" "$4" | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
 EOF
-	IFS='#' read param64 param32 <<EOF
-$(echo "$5" | sed -e 's/%\([^%]\+\)%/$\1/g' | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
+	IFS='#' read -r param64 param32 <<EOF
+$(printf "%s" "$5" | sed -e 's/%\([^%]\+\)%/$\1/g' | sed -e 's/[[:space:]]*--[[:space:]]*/#/g')
 EOF
 
 	if [ -n "$kernel32" ]; then
@@ -159,16 +159,16 @@ EOF
 		cat >>"$livemnt"/grub.cfg <<EOF
 	if cpuid -l; then
 		linux (iso)$kernel64 $param64
-		initrd$(for initrd in $initrd64; do echo -n " (iso)$initrd"; done)
+		initrd$(for initrd in $initrd64; do printf " (iso)%s" "$initrd"; done)
 	else
 		linux (iso)$kernel32 $param32
-		initrd$(for initrd in $initrd32; do echo -n " (iso)$initrd"; done)
+		initrd$(for initrd in $initrd32; do printf " (iso)%s" "$initrd"; done)
 	fi
 EOF
 	else
 		cat >>"$livemnt"/grub.cfg <<EOF
 	linux (iso)$kernel64 $param64
-	initrd$(for initrd in $initrd64; do echo -n " (iso)$initrd"; done)
+	initrd$(for initrd in $initrd64; do printf " (iso)%s" "$initrd"; done)
 EOF
 	fi
 
@@ -186,13 +186,13 @@ EOF
 
 	iso="$livemnt/$(basename "$2")"
 
-	([ ! -e "$iso" ] || [ "$iso" -ot "$2" ]) && cp "$2" "$iso"
+	{ [ ! -e "$iso" ] || [ "$iso" -ot "$2" ]; } && cp "$2" "$iso"
 
 	unset iso
 }
 
 refind() {
-	echo -e "\t$1"
+	printf "	%s" "$1"
 
 	refindmnt="$(mktemp -d)"
 	mount -o ro "$2" "$refindmnt"
@@ -223,7 +223,7 @@ EOF
 	unset refindmnt
 }
 
-source "$(readlink -f $distros)"
+. "$(readlink -f $distros)"
 
 # configure grub
 echo "configuring grub..."
