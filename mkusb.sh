@@ -129,7 +129,7 @@ label() {
 }
 
 iso() {
-	printf "	%s" "$1"
+	printf "	%s\n" "$1"
 	cat >>"$livemnt"/grub.cfg <<EOF
 menuentry '$1' {
 	set filename=/$(basename "$2")
@@ -192,7 +192,7 @@ EOF
 }
 
 refind() {
-	printf "	%s" "$1"
+	printf "	%s\n" "$1"
 
 	refindmnt="$(mktemp -d)"
 	mount -o ro "$2" "$refindmnt"
