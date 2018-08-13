@@ -191,6 +191,26 @@ EOF
 	unset iso
 }
 
+freedos() {
+	printf "	%s\n" "$1"
+	cat >>"$livemnt"/grub.cfg <<EOF
+menuentry '$1' {
+	set filename=/$(basename "$2")
+	set label=$label
+	loopback iso \$filename
+	linux16 (iso)/ISOLINUX/MEMDISK iso
+	initrd16 /\$filename
+}
+
+EOF
+
+	iso="$livemnt/$(basename "$2")"
+
+	{ [ ! -e "$iso" ] || [ "$iso" -ot "$2" ]; } && cp "$2" "$iso"
+
+	unset iso
+}
+
 refind() {
 	printf "	%s\n" "$1"
 

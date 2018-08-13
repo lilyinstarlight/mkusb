@@ -31,4 +31,5 @@ iso 'ZorinOS 12.1 Education' /mnt/img/iso/Zorin-OS-12.1-Education-64.iso /casper
 iso 'Security Onion 14.04.5.2' /mnt/img/iso/securityonion-14.04.5.2.iso /casper/vmlinuz /casper/initrd.gz 'file=/cdrom/preseed/custom.seed boot=casper quiet splash iso-scan/filename=%filename%'
 iso 'oVirt Live 4.1.2' /mnt/img/iso/ovirt-live-4.1.2.iso /isolinux/vmlinuz0 /isolinux/initrd0.img 'root=live:CDLABEL=ovirt-live-4.1.2 rootfstype=auto ro rd.live.image quiet rhgb rd.luks=0 rd.md=0 rd.dm=0 rd.live.check rd.live.overlay.size=1024 iso-scan/filename=%filename%'
 iso 'Clonezilla 2.5.2' /mnt/img/iso/clonezilla-live-2.5.2-17-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live union=overlay username=user config components quiet noswap edd=on locales= keyboard-layouts= ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch="no" vga=791 toram=filesystem.squashfs ip= net.ifnames=0 nosplash findiso=%filename%'
+freedos 'FreeDOS 1.2' /mnt/img/iso/FD12CD.iso
 refind 'rEFInd 0.11.2' /mnt/img/iso/refind-cd-0.11.2.iso
