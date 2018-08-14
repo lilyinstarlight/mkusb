@@ -10,6 +10,7 @@ Requirements
 * grub
 * dosfstools
 * dialog (optional; required if not specifying device on command line)
+* syslinux (optional; only required for FreeDOS)
 * sane environment (util-linux, coreutils, etc.)
 
 

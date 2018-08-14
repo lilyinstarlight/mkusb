@@ -1,3 +1,7 @@
-label RESCUE
+label LIVE
+iso 'Fedora Workstation 28' /var/lib/iso/Fedora-Workstation-Live-x86_64-28-1.1.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-28-1-1 rd.live.image quiet iso-scan/filename=%filename%'
+iso 'Kali 2018.2' /var/lib/iso/kali-linux-2018.2-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live components splash username=root hostname=kali findiso=%filename%'
+iso 'Tails 3.8' /var/lib/iso/tails-amd64-3.8.iso /live/vmlinuz /live/initrd.img 'boot=live config apparmor=1 security=apparmor nopersistence noprompt timezone=Etc/UTC block.events_dfl_poll_msecs=1000 splash noautologin module=Tails kaslr slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 union=aufs quiet findiso=%filename%'
 iso 'System Rescue CD 5.2.2' /var/lib/iso/systemrescuecd-x86-5.2.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
+freedos 'FreeDOS 1.2' /var/lib/iso/FD12LITE.img
 refind 'rEFInd 0.11.3' /var/lib/iso/refind-cd-0.11.3.iso

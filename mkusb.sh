@@ -195,20 +195,26 @@ freedos() {
 	printf "	%s\n" "$1"
 	cat >>"$livemnt"/grub.cfg <<EOF
 menuentry '$1' {
+	insmod progress
+
 	set filename=/$(basename "$2")
 	set label=$label
-	loopback iso \$filename
-	linux16 (iso)/ISOLINUX/MEMDISK iso
+	linux16 /memdisk
 	initrd16 /\$filename
 }
 
 EOF
 
-	iso="$livemnt/$(basename "$2")"
+	memdisk="$livemnt/memdisk"
 
-	{ [ ! -e "$iso" ] || [ "$iso" -ot "$2" ]; } && cp "$2" "$iso"
+	{ [ ! -e "$memdisk" ] || [ "$memdisk" -ot /usr/share/syslinux/memdisk ]; } && cp /usr/share/syslinux/memdisk "$memdisk"
 
-	unset iso
+	img="$livemnt/$(basename "$2")"
+
+	{ [ ! -e "$img" ] || [ "$img" -ot "$2" ]; } && cp "$2" "$img"
+
+	unset memdisk
+	unset img
 }
 
 refind() {

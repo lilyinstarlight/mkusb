@@ -1,4 +1,4 @@
 label RESCUE
 iso 'System Rescue CD 5.2.2' /var/lib/iso/systemrescuecd-x86-5.2.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
-freedos 'FreeDOS 1.2' /mnt/img/iso/FD12CD.iso
+freedos 'FreeDOS 1.2' /var/lib/iso/FD12LITE.img
 refind 'rEFInd 0.11.3' /var/lib/iso/refind-cd-0.11.3.iso
