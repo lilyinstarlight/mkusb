@@ -7,6 +7,19 @@ fi
 # whether to partition with fat or ext2
 fat=1
 
+# get system configuration
+if which grub2-install; then
+	sysgrub=grub2
+else
+	sysgrub=grub
+fi
+
+if [ -e /usr/lib/syslinux/bios/memdisk ]; then
+	sysmemdisk="/usr/lib/syslinux/bios/memdisk"
+else
+	sysmemdisk="/usr/share/syslinux/memdisk"
+fi
+
 # get distro configuration
 distros="$1"
 if [ -z "$distros" ]; then
@@ -103,8 +116,8 @@ unset efipart
 
 # install grub
 echo "installing grub..."
-grub-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
-grub-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
+"$sysgrub"-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
+"$sysgrub"-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
 
 unset dev
 
@@ -207,7 +220,7 @@ EOF
 
 	memdisk="$livemnt/memdisk"
 
-	{ [ ! -e "$memdisk" ] || [ "$memdisk" -ot /usr/share/syslinux/memdisk ]; } && cp /usr/share/syslinux/memdisk "$memdisk"
+	{ [ ! -e "$memdisk" ] || [ "$memdisk" -ot "$sysmemdisk" ]; } && cp "$sysmemdisk" "$memdisk"
 
 	img="$livemnt/$(basename "$2")"
 
