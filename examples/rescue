@@ -1,4 +1,4 @@
 label RESCUE
-iso 'System Rescue CD 5.2.2' /var/lib/iso/systemrescuecd-x86-5.2.2.iso '/isolinux/rescue64 -- /isolinux/rescue32' /isolinux/initram.igz 'docache isoloop=%filename%'
+iso 'System Rescue CD 6.0.1' /var/lib/iso/systemrescuecd-6.0.1.iso /sysresccd/boot/x86_64/vmlinuz '/sysresccd/boot/intel_ucode.img /sysresccd/boot/amd_ucode.img /sysresccd/boot/x86_64/sysresccd.img' 'archisobasedir=sysresccd img_label=%label% img_loop=%filename% copytoram'
 freedos 'FreeDOS 1.2' /var/lib/iso/FD12LITE.img
-refind 'rEFInd 0.11.3' /var/lib/iso/refind-cd-0.11.3.iso
+refind 'rEFInd 0.11.4' /var/lib/iso/refind-cd-0.11.4.iso
