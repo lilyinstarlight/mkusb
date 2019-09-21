@@ -8,7 +8,7 @@ fi
 fat=1
 
 # get system configuration
-if which grub2-install &>/dev/null; then
+if which grub2-install >/dev/null 2>/dev/null; then
 	sysgrub=grub2
 else
 	sysgrub=grub
