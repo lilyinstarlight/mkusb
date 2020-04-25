@@ -1,4 +1,4 @@
-.TH "MKUSB" "1" "September 2019" "0.2" ""
+.TH "MKUSB" "1" "April 2020" "0.2" ""
 .hy
 .SH NAME
 .PP
@@ -53,8 +53,10 @@ Format:
 .nf
 \f[C]
 label\ <filesystem\ label>
-iso\ <iso\ name>\ <kernel>\ <initrd>\ <boot\ flags>
-iso\ <iso\ name>\ <kernel>\ <initrd>\ <boot\ flags>
+iso\ <boot\ label>\ <iso>\ <kernel>\ <initrd>\ <boot\ flags>
+iso\ <boot\ label>\ <iso>\ <kernel>\ <initrd>\ <boot\ flags>
+freedos\ <boot\ label>\ <FD.img>
+refind\ <boot\ label>\ <refind-cd.iso>
 \&...
 \f[]
 .fi
