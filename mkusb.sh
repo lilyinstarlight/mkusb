@@ -266,8 +266,8 @@ EOF
 
 # configure grub
 echo "configuring grub..."
-cat >"$efimnt"/grub/grub.cfg <<EOF
-if loadfont /grub/fonts/unicode.pf2; then
+cat >"$efimnt"/"$sysgrub"/grub.cfg <<EOF
+if loadfont /$sysgrub/fonts/unicode.pf2; then
 	set gfxmode=auto
 
 	if [ \${grub_platform} == "efi" ]; then
