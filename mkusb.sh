@@ -8,13 +8,29 @@ fi
 fat=1
 
 # get system configuration
-if which grub2-install >/dev/null 2>/dev/null; then
+if [ -n "$MKUSB_GRUB" ]; then
+	sysgrub="$MKUSB_GRUB"
+elif which grub2-install >/dev/null 2>/dev/null; then
 	sysgrub=grub2
 else
 	sysgrub=grub
 fi
 
-if [ -e /usr/lib/syslinux/bios/memdisk ]; then
+if [ -n "$MKUSB_GRUB_EFI" ]; then
+	sysgrubefi="$MKUSB_GRUB_EFI"
+else
+	sysgrubefi="$sysgrub"-install
+fi
+
+if [ -n "$MKUSB_GRUB_PC" ]; then
+	sysgrubpc="$MKUSB_GRUB_PC"
+else
+	sysgrubpc="$sysgrub"-install
+fi
+
+if [ -n "$MKUSB_MEMDISK" ]; then
+	sysmemdisk="$MKUSB_MEMDISK"
+elif [ -e /usr/lib/syslinux/bios/memdisk ]; then
 	sysmemdisk="/usr/lib/syslinux/bios/memdisk"
 else
 	sysmemdisk="/usr/share/syslinux/memdisk"
@@ -116,8 +132,8 @@ unset efipart
 
 # install grub
 echo "installing grub..."
-"$sysgrub"-install --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
-"$sysgrub"-install --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
+"$sysgrubefi" --target=x86_64-efi --boot-directory="$efimnt" --efi-directory="$efimnt" --removable >/dev/null
+"$sysgrubpc" --target=i386-pc --boot-directory="$efimnt" "$dev" >/dev/null
 
 unset dev
 
@@ -199,7 +215,7 @@ EOF
 
 	iso="$livemnt/$(basename "$2")"
 
-	{ [ ! -e "$iso" ] || [ "$iso" -ot "$2" ]; } && cp "$2" "$iso"
+	{ [ ! -e "$iso" ] || [ -n "$(find -L "$2" -prune -newer "$iso" -exec echo . ';')" ]; } && cp "$2" "$iso"
 
 	unset iso
 }
@@ -220,11 +236,11 @@ EOF
 
 	memdisk="$livemnt/memdisk"
 
-	{ [ ! -e "$memdisk" ] || [ "$memdisk" -ot "$sysmemdisk" ]; } && cp "$sysmemdisk" "$memdisk"
+	{ [ ! -e "$memdisk" ] || [ -n "$(find -L "$sysmemdisk" -prune -newer "$memdisk" -exec echo . ';')" ]; } && cp "$sysmemdisk" "$memdisk"
 
 	img="$livemnt/$(basename "$2")"
 
-	{ [ ! -e "$img" ] || [ "$img" -ot "$2" ]; } && cp "$2" "$img"
+	{ [ ! -e "$img" ] || [ -n "$(find -L "$2" -prune -newer "$img" -exec echo . ';')" ]; } && cp "$2" "$img"
 
 	unset memdisk
 	unset img

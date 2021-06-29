@@ -1,4 +1,4 @@
-.TH "MKUSB" "1" "March 2021" "0.2" ""
+.TH "MKUSB" "1" "June 2021" "0.2" ""
 .hy
 .SH NAME
 .PP
@@ -40,6 +40,27 @@ Device path for ISO partition of target USB drive
 .PP
 USB is partitioned with an EFI and ISO partition if not specified
 .RE
+.SH ENVIRONMENT VARIABLES
+.TP
+.B \f[B]MKUSB_GRUB\f[]
+Prefix for grub utilities and paths (e.g. "\f[B]grub\f[]" or "\f[B]grub2\f[]")
+.RS
+.RE
+.TP
+.B \f[B]MKUSB_GRUB_EFI\f[]
+Path to grub-install with x86_64-efi target
+.RS
+.RE
+.TP
+.B \f[B]MKUSB_GRUB_PC\f[]
+Path to grub-install with i386-pc target
+.RS
+.RE
+.TP
+.B \f[B]MKUSB_MEMDISK\f[]
+Path to memdisk boot image from syslinux
+.RS
+.RE
 .SH MULTIBOOT DEFINITION
 .PP
 Multiboot definition files contain details about where an ISO is located
@@ -70,8 +91,8 @@ checking the boot parameters in it.
 Because the distros file is just a shell script, more advanced features
 can be added like conditionally adding ISO files based on the
 environment.
-Example distros files are available below, in this repository or in
-\f[B]/usr/share/mkusb/examples\f[].
+Example distros files are available below or at
+\f[B]https://github.com/lilyinstarlight/mkusb/tree/main/examples\f[].
 .SH EXAMPLES
 .PP
 The following examples requires ISOs to be downloaded in the same
@@ -84,12 +105,12 @@ Rescue:
 \f[C]
 label\ RESCUE
 
-iso\ \[aq]System\ Rescue\ CD\ 6.0.1\[aq]\ systemrescuecd\-6.0.1.iso\ \\
+iso\ \[aq]System\ Rescue\ CD\ 8.03\[aq]\ systemrescuecd\-8.03-amd64.iso\ \\
 \ \ \ \ /sysresccd/boot/x86_64/vmlinuz\ \\
 \ \ \ \ \[aq]/sysresccd/boot/intel_ucode.img\ /sysresccd/boot/amd_ucode.img\ /sysresccd/boot/x86_64/sysresccd.img\[aq]\ \\
 \ \ \ \ \[aq]archisobasedir=sysresccd\ img_label=%label%\ img_loop=%filename%\ copytoram\[aq]
-freedos\ \[aq]FreeDOS\ 1.2\[aq]\ FD12LITE.img
-refind\ \[aq]rEFInd\ 0.11.4\[aq]\ refind\-cd\-0.11.4.iso
+freedos\ \[aq]FreeDOS\ 1.3 RC4\[aq]\ FD13LITE.img
+refind\ \[aq]rEFInd\ 0.13.2\[aq]\ refind\-cd\-0.13.2.iso
 \f[]
 .fi
 .SH AUTHORS
