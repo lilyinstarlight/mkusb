@@ -1,4 +1,13 @@
 #!/bin/sh -e
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+	cat >&2 <<EOF
+$0 [distros] [device] [efi partition] [live partition]
+
+  See mkusb(1) manual page for more info
+EOF
+	exit
+fi
+
 if [ "$(id -u)" -ne 0 ]; then
 	echo "error: script must be run as root"
 	exit 1
@@ -101,8 +110,13 @@ ${dev}2 : size=$secefi, type=ef
 EOF
 	blockdev --rereadpt "$dev"
 
-	livepart="$dev"1
-	efipart="$dev"2
+	if [ -b "$dev"p1 ]; then
+		livepart="$dev"p1
+		efipart="$dev"p2
+	else
+		livepart="$dev"1
+		efipart="$dev"2
+	fi
 
 	unset secstart
 	unset secefi

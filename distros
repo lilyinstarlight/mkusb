@@ -1,7 +1,7 @@
 label LIVE
-iso 'Fedora Workstation 34' ~/iso/Fedora-Workstation-Live-x86_64-34-1.2.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-34-1-2 rd.live.image quiet iso-scan/filename=%filename%'
-iso 'Kali 2021.2' ~/iso/kali-linux-2021.2-live-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live components quiet splash noeject findiso=%filename%'
-iso 'Tails 4.19' ~/iso/tails-amd64-4.19.iso /live/vmlinuz /live/initrd.img 'boot=live config live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt quiet findiso=%filename%'
-iso 'System Rescue CD 8.03' ~/iso/systemrescuecd-8.03-amd64.iso /sysresccd/boot/x86_64/vmlinuz '/sysresccd/boot/intel_ucode.img /sysresccd/boot/amd_ucode.img /sysresccd/boot/x86_64/sysresccd.img' 'archisobasedir=sysresccd img_label=%label% img_loop=%filename% copytoram'
-freedos 'FreeDOS 1.3 RC4' ~/iso/FD13LITE.img
-refind 'rEFInd 0.13.2' ~/iso/refind-cd-0.13.2.iso
+iso 'Fedora Workstation 34' iso/Fedora-Workstation-Live-x86_64-34-1.2.iso /images/pxeboot/vmlinuz /images/pxeboot/initrd.img 'root=live:CDLABEL=Fedora-WS-Live-34-1-2 rd.live.image quiet iso-scan/filename=%filename%'
+iso 'Kali 2021.2' iso/kali-linux-2021.2-live-amd64.iso /live/vmlinuz /live/initrd.img 'boot=live components quiet splash noeject findiso=%filename%'
+iso 'Tails 4.19' iso/tails-amd64-4.19.iso /live/vmlinuz /live/initrd.img 'boot=live config nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt quiet findiso=%filename%'
+iso 'System Rescue CD 8.03' iso/systemrescue-8.03-amd64.iso /sysresccd/boot/x86_64/vmlinuz '/sysresccd/boot/intel_ucode.img /sysresccd/boot/amd_ucode.img /sysresccd/boot/x86_64/sysresccd.img' 'archisobasedir=sysresccd img_label=%label% img_loop=%filename% copytoram'
+freedos 'FreeDOS 1.3 RC4' iso/FD13LITE.img
+refind 'rEFInd 0.13.2' iso/refind-cd-0.13.2.iso
