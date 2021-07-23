@@ -173,9 +173,24 @@ label() {
 
 iso() {
 	printf "	%s\n" "$1"
+
+	case "$2" in
+		/*)
+			src="$2"
+			;;
+
+		*)
+			if [ -f "$(dirname "$(readlink -f "$distros")")/$2" ]; then
+				src="$(dirname "$(readlink -f "$distros")")/$2"
+			else
+				src="$2"
+			fi
+			;;
+	esac
+
 	cat >>"$livemnt"/grub.cfg <<EOF
 menuentry '$1' {
-	set filename=/$(basename "$2")
+	set filename=/$(basename "$src")
 	set label=$label
 	loopback iso \$filename
 EOF
@@ -227,20 +242,35 @@ EOF
 
 EOF
 
-	iso="$livemnt/$(basename "$2")"
+	iso="$livemnt/$(basename "$src")"
 
-	{ [ ! -e "$iso" ] || [ -n "$(find -L "$2" -prune -newer "$iso" -exec echo . ';')" ]; } && cp "$2" "$iso"
+	{ [ ! -e "$iso" ] || [ -n "$(find -L "$src" -prune -newer "$iso" -exec echo . ';')" ]; } && cp "$src" "$iso"
 
 	unset iso
 }
 
 freedos() {
 	printf "	%s\n" "$1"
+
+	case "$2" in
+		/*)
+			src="$2"
+			;;
+
+		*)
+			if [ -f "$(dirname "$(readlink -f "$distros")")/$2" ]; then
+				src="$(dirname "$(readlink -f "$distros")")/$2"
+			else
+				src="$2"
+			fi
+			;;
+	esac
+
 	cat >>"$livemnt"/grub.cfg <<EOF
 menuentry '$1' {
 	insmod progress
 
-	set filename=/$(basename "$2")
+	set filename=/$(basename "$src")
 	set label=$label
 	linux16 /memdisk
 	initrd16 /\$filename
@@ -252,9 +282,9 @@ EOF
 
 	{ [ ! -e "$memdisk" ] || [ -n "$(find -L "$sysmemdisk" -prune -newer "$memdisk" -exec echo . ';')" ]; } && cp "$sysmemdisk" "$memdisk"
 
-	img="$livemnt/$(basename "$2")"
+	img="$livemnt/$(basename "$src")"
 
-	{ [ ! -e "$img" ] || [ -n "$(find -L "$2" -prune -newer "$img" -exec echo . ';')" ]; } && cp "$2" "$img"
+	{ [ ! -e "$img" ] || [ -n "$(find -L "$src" -prune -newer "$img" -exec echo . ';')" ]; } && cp "$src" "$img"
 
 	unset memdisk
 	unset img
@@ -263,8 +293,22 @@ EOF
 refind() {
 	printf "	%s\n" "$1"
 
+	case "$2" in
+		/*)
+			src="$2"
+			;;
+
+		*)
+			if [ -f "$(dirname "$(readlink -f "$distros")")/$2" ]; then
+				src="$(dirname "$(readlink -f "$distros")")/$2"
+			else
+				src="$2"
+			fi
+			;;
+	esac
+
 	refindmnt="$(mktemp -d)"
-	mount -o ro "$2" "$refindmnt"
+	mount -o ro "$src" "$refindmnt"
 
 	cat >>"$livemnt"/grub.cfg <<EOF
 if [ \${grub_platform} == "efi" ]; then
@@ -292,7 +336,7 @@ EOF
 	unset refindmnt
 }
 
-. "$(readlink -f $distros)"
+. "$(readlink -f "$distros")"
 
 # configure grub
 echo "configuring grub..."
