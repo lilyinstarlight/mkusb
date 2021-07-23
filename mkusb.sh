@@ -131,6 +131,8 @@ EOF
 	mkfs.fat -F 32 -n ESP "$efipart" >/dev/null
 
 	formatted=1
+else
+	label="$(lsblk -ndo label "$livepart")"
 fi
 
 # mount devie
@@ -158,9 +160,9 @@ echo "copying distros..."
 printf "" >"$livemnt"/grub.cfg
 
 label() {
-	label="$1"
-
 	if [ -n "$formatted" ]; then
+		label="$1"
+
 		umount "$livepart"
 		if [ $fat -ne 0 ]; then
 			fatlabel "$livepart" "$label" >/dev/null
