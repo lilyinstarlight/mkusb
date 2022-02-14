@@ -135,14 +135,14 @@ else
 	label="$(lsblk -ndo label "$livepart")"
 fi
 
-# mount devie
+# mount device
 echo "mounting..."
 livemnt="$(mktemp -d)"
 efimnt="$(mktemp -d)"
 mount "$livepart" "$livemnt"
 mount "$efipart" "$efimnt"
 
-trap "(set +e; umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt') >/dev/null 2>/dev/null" EXIT
+trap "(set +e; umount '$livemnt'; rmdir '$livemnt'; umount '$efimnt'; rmdir '$efimnt'; true) >/dev/null 2>/dev/null" EXIT
 
 unset efipart
 
