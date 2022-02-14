@@ -269,14 +269,16 @@ freedos() {
 	esac
 
 	cat >>"$livemnt"/grub.cfg <<EOF
-menuentry '$1' {
-	insmod progress
+if [ \${grub_platform} == "pc" ]; then
+	menuentry '$1' {
+		insmod progress
 
-	set filename=/$(basename "$src")
-	set label=$label
-	linux16 /memdisk
-	initrd16 /\$filename
-}
+		set filename=/$(basename "$src")
+		set label=$label
+		linux16 /memdisk
+		initrd16 /\$filename
+	}
+fi
 
 EOF
 
